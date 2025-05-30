@@ -1,0 +1,31 @@
+<footer class="bg-dark text-white py-4 mt-5">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6">
+                <h5>📚 Bookstore</h5>
+                <p>Cửa hàng sách online uy tín, chất lượng cao.</p>
+            </div>
+            <div class="col-md-3">
+                <h6>Liên kết</h6>
+                <ul class="list-unstyled">
+                    <li><a href="{% url 'pages:home' %}" class="text-white-50">Trang chủ</a></li>
+                    <li><a href="{% url 'books:list' %}" class="text-white-50">Sách</a></li>
+                    <li><a href="{% url 'pages:about' %}" class="text-white-50">Giới thiệu</a></li>
+                    <li><a href="{% url 'pages:contact' %}" class="text-white-50">Liên hệ</a></li>
+                </ul>
+            </div>
+            <div class="col-md-3">
+                <h6>Liên hệ</h6>
+                <p class="text-white-50">
+                    📧 contact@bookstore.com<br>
+                    📞 0123 456 789<br>
+                    📍 123 Đường ABC, TP.HCM
+                </p>
+            </div>
+        </div>
+        <hr class="my-4">
+        <div class="text-center">
+            <p class="mb-0">&copy; 2024 Bookstore. All rights reserved.</p>
+        </div>
+    </div>
+</footer> 
