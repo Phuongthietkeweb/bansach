@@ -1,0 +1,40 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ page_title }} - Chi Tiết Sách</title>
+    <link rel="stylesheet" href="{% static 'books/style.css' %}">
+</head>
+<body>
+    <div class="container detail-page">
+        <h1>📖 Chi Tiết Sách</h1>
+
+        <div class="book-detail-content">
+            {% if book.image %}
+                <div class="book-image">
+                    <img src="{{ book.image.url }}" alt="{{ book.title }}">
+                </div>
+            {% else %}
+                <div class="book-image">
+                    <img src="{% static 'books/placeholder.png' %}" alt="No Image">
+                </div>
+            {% endif %}
+            <div class="book-info">
+                <h2>{{ book.title }}</h2>
+                <p><strong>Tác giả:</strong> {{ book.author }}</p>
+                <p><strong>Thể loại:</strong> (Bạn có thể thêm trường này vào model)</p>
+                <p><strong>Giá:</strong> {{ book.price }} VNĐ</p>
+                <p><strong>Số lượng sách còn:</strong> {{ book.stock }} cuốn</p>
+                <h3>Mô tả về sách:</h3>
+                <p>{{ book.description }}</p>
+            </div>
+        </div>
+
+        <div class="footer-link">
+            <a href="{% url 'books:list' %}">← Về danh sách sách</a>
+        </div>
+    </div>
+</body>
+</html>

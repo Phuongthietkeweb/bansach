@@ -1,0 +1,41 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ page_title }}</title>
+    {# Đường dẫn đến static file trong ứng dụng 'books' #}
+    <link rel="stylesheet" href="{% static 'books/style.css' %}"> 
+</head>
+<body>
+    <div class="container">
+        <h1>📚 {{ page_title }}</h1>
+
+        {% if books %}
+            <div class="book-grid">
+                {% for book in books %}
+                <div class="book-card">
+                    <a href="{% url 'books:detail' slug=book.slug %}">
+                        {% if book.image %}
+                            {# Đường dẫn đến media file (ảnh upload) #}
+                            <img src="{{ book.image.url }}" alt="{{ book.title }}">
+                        {% else %}
+                            {# Đường dẫn đến static placeholder image #}
+                            <img src="{% static 'books/placeholder.png' %}" alt="No Image"> 
+                        {% endif %}
+                        <div class="book-card-info">
+                            <h3>{{ book.title }}</h3>
+                            <p class="author">{{ book.author }}</p>
+                            <p class="price">{{ book.price }} VNĐ</p>
+                        </div>
+                    </a>
+                </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <p class="no-books">Hiện tại chưa có sách nào để hiển thị. Vui lòng quay lại sau!</p>
+        {% endif %}
+    </div>
+</body>
+</html>
