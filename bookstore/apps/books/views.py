@@ -1,3 +1,4 @@
+
 from django.shortcuts import render
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
@@ -9,15 +10,25 @@ from django.contrib.auth.decorators import user_passes_test
 from django.shortcuts import render, redirect, get_object_or_404
 from django.db.models import Q
 
+# apps/books/views.py
+
+from django.shortcuts import render, get_object_or_404
+from .models import Book
+
+
 def book_list_view(request):
-    """Danh sách sách"""
-    return HttpResponse('''
-    <h1>📚 Danh sách sách</h1>
-    <p>Hiện tại chưa có sách nào. Vui lòng quay lại sau!</p>
-    <a href="/">← Về trang chủ</a>
-    ''')
+    """
+    Hiển thị danh sách tất cả các cuốn sách trên trang chủ.
+    """
+    books = Book.objects.all().order_by('title')
+    context = {
+        'books': books,
+        'page_title': 'Danh Sách Sách',
+    }
+    return render(request, 'books/book_list.html', context) # Django sẽ tìm trong apps/books/templates/books
 
 def book_detail_view(request, slug):
+
     """Chi tiết sách"""
     return HttpResponse(f'''
     <h1>📖 Chi tiết sách: {slug}</h1>
@@ -57,3 +68,14 @@ def delete_user(request, user_id):
     if request.user != user:  # Không cho xóa chính mình
         user.delete()
     return redirect('books:user_list')
+
+    """
+    Hiển thị thông tin chi tiết của một cuốn sách.
+    """
+    book = get_object_or_404(Book, slug=slug) 
+    context = {
+        'book': book,
+        'page_title': book.title,
+    }
+    return render(request, 'books/book_detail.html', context) # Django sẽ tìm trong apps/books/templates/books
+
