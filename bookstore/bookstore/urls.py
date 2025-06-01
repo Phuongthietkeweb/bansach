@@ -28,6 +28,7 @@ urlpatterns = [
     path('books/', include('books.urls',namespace='books')),     # Danh sách sách, chi tiết sách
     path('cart/', include('cart.urls')),       # Giỏ hàng
     path('orders/', include('orders.urls')),   # Đơn hàng, thanh toán
+    path('accounts/', include('accounts.urls')),
 ]
 
 # Serve media files trong development
