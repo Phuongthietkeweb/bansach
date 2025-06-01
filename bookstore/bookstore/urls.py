@@ -25,7 +25,7 @@ urlpatterns = [
     
     # User routes
     path('', include('pages.urls')),           # Trang chủ, about, contact
-    path('books/', include('books.urls')),     # Danh sách sách, chi tiết sách
+    path('books/', include('books.urls',namespace='books')),     # Danh sách sách, chi tiết sách
     path('cart/', include('cart.urls')),       # Giỏ hàng
     path('orders/', include('orders.urls')),   # Đơn hàng, thanh toán
 ]

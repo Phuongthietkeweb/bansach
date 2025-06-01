@@ -24,6 +24,31 @@
                 <li class="nav-item">
                     <a class="nav-link" href="{% url 'pages:contact' %}">Liên hệ</a>
                 </li>
+                {% if user.is_authenticated %}
+                    <li class="nav-item">
+                        <a class="nav-link">Xin chào {{ user.username }}</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'books:profile' %}">Thông tin cá nhân</a>
+                    </li>
+                    {% if user.is_staff %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'books:user_list' %}">Quản lý người dùng</a>
+                    </li>
+                    {% endif %}
+                    <form method="post" action="{% url 'books:logout' %}">
+                        {% csrf_token %}
+                        <button type="submit" class="nav-link btn btn-link" >Đăng xuất</button>
+                    </form>
+
+                {% else %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'books:login' %}">Đăng nhập</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'books:register' %}">Đăng ký</a>
+                    </li>
+                {% endif %}
             </ul>
             
             <ul class="navbar-nav">
