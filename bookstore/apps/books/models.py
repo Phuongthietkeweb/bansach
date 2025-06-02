@@ -16,7 +16,7 @@ class Book(models.Model):
     price = models.DecimalField(max_digits=10, decimal_places=3, verbose_name="Giá")
     stock = models.IntegerField(verbose_name="Số Lượng Tồn Kho")
     image = models.ImageField(upload_to='books/', blank=True, null=True, verbose_name="Hình Ảnh")
-    category = models.ForeignKey(Category, on_delete=models.CASCADE, verbose_name="Thể Loại")  # Thêm ForeignKey cho Category
+    category = models.ForeignKey(Category, on_delete=models.CASCADE, verbose_name="Thể Loại", null=True, blank=True)
 
     class Meta:
         verbose_name = "Sách"
