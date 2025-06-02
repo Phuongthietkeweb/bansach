@@ -19,6 +19,7 @@ from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
 
+
 urlpatterns = [
     # Admin routes
     path('admin/', admin.site.urls),
@@ -28,6 +29,8 @@ urlpatterns = [
     path('books/', include('books.urls',namespace='books')),     # Danh sách sách, chi tiết sách
     path('cart/', include('cart.urls')),       # Giỏ hàng
     path('orders/', include('orders.urls')),   # Đơn hàng, thanh toán
+    path('accounts/', include('accounts.urls')),
+    
 ]
 
 # Serve media files trong development
