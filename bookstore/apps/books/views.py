@@ -10,7 +10,7 @@ from django.contrib.auth.decorators import user_passes_test
 from django.shortcuts import render, redirect, get_object_or_404
 from django.db.models import Q
 from django.core.paginator import Paginator
-from .models import Book
+from .models import Book, Category 
 
 # apps/books/views.py
 
