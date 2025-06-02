@@ -37,5 +37,46 @@
             <p class="no-books">Hiện tại chưa có sách nào để hiển thị. Vui lòng quay lại sau!</p>
         {% endif %}
     </div>
+    <form method="get" class="mb-4">
+    <input type="text" name="q" placeholder="Tìm kiếm theo tên sách" value="{{ request.GET.q }}">
+    <input type="number" name="min_price" placeholder="Giá tối thiểu" value="{{ request.GET.min_price }}">
+    <input type="number" name="max_price" placeholder="Giá tối đa" value="{{ request.GET.max_price }}">
+    <select name="category">
+        <option value="">Chọn thể loại</option>
+        <option value="Thể loại 1">Thể loại 1</option>
+        <option value="Thể loại 2">Thể loại 2</option>
+        <!-- Thêm các thể loại khác -->
+    </select>
+    <button type="submit">Tìm kiếm</button>
+</form>
+<div class="book-grid">
+    {% for book in page_obj %}
+        <div class="book-card">
+            <a href="{% url 'books:detail' slug=book.slug %}">
+                <img src="{{ book.image.url }}" alt="{{ book.title }}">
+                <div class="book-card-info">
+                    <h3>{{ book.title }}</h3>
+                    <p class="author">{{ book.author }}</p>
+                    <p class="price">{{ book.price }} VNĐ</p>
+                </div>
+            </a>
+        </div>
+    {% endfor %}
+</div>
+<div class="pagination">
+    <span class="step-links">
+        {% if page_obj.has_previous %}
+            <a href="?page=1">&laquo; Trang đầu</a>
+            <a href="?page={{ page_obj.previous_page_number }}">Trang trước</a>
+        {% endif %}
+        <span class="current">
+            Trang {{ page_obj.number }} của {{ page_obj.paginator.num_pages }}.
+        </span>
+        {% if page_obj.has_next %}
+            <a href="?page={{ page_obj.next_page_number }}">Trang sau</a>
+            <a href="?page={{ page_obj.paginator.num_pages }}">Trang cuối &raquo;</a>
+        {% endif %}
+    </span>
+</div>
 </body>
 </html>
