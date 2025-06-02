@@ -1,21 +1,6 @@
-
-from django.contrib import admin
-from django.contrib.auth.models import User
-from django.contrib.auth.admin import UserAdmin
-from .models import UserProfile
-
-class UserProfileAdmin(admin.ModelAdmin):
-    list_display = ('user', 'full_name', 'phone', 'birthday')
-    search_fields = ('user__username', 'full_name')
-
-admin.site.register(UserProfile, UserProfileAdmin)
- 
-
-# apps/books/admin.py
-
 from django.contrib import admin
 from django.utils.html import format_html
-from .models import Book
+from .models import Book, Category
 
 @admin.register(Book)
 class BookAdmin(admin.ModelAdmin):
@@ -41,5 +26,10 @@ class BookAdmin(admin.ModelAdmin):
         return "Không có ảnh"
     image_tag.short_description = 'Ảnh Sách'
     image_tag.allow_tags = True
+
+@admin.register(Category)
+class CategoryAdmin(admin.ModelAdmin):
+    list_display = ('name',)
+    search_fields = ('name',)
 
 

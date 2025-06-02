@@ -1,39 +1,55 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse
-from django.shortcuts import render, redirect
 from django.contrib.auth.forms import UserCreationForm
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib.auth.models import User
 from django.contrib import messages
-from django.contrib.auth.decorators import user_passes_test
-from django.shortcuts import render, redirect, get_object_or_404
 from django.db.models import Q
-
-# apps/books/views.py
-
-from django.shortcuts import render, get_object_or_404
-from .models import Book
+from django.core.paginator import Paginator
+from .models import Book, Category
 
 
 def book_list_view(request):
-    """
-    Hiển thị danh sách tất cả các cuốn sách trên trang chủ.
-    """
-    books = Book.objects.all().order_by('title')
+    query = request.GET.get('q')
+    min_price = request.GET.get('min_price')
+    max_price = request.GET.get('max_price')
+    category = request.GET.get('category')
+
+    books = Book.objects.all()
+
+    if query:
+        books = books.filter(title__icontains=query)
+    if min_price:
+        books = books.filter(price__gte=min_price)
+    if max_price:
+        books = books.filter(price__lte=max_price)
+    if category:
+        books = books.filter(category_id=category)
+
+    paginator = Paginator(books.order_by('title'), 10)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+
+    categories = Category.objects.all()
+
     context = {
-        'books': books,
+        'page_obj': page_obj,
         'page_title': 'Danh Sách Sách',
+        'categories': categories,
+        'selected_category': int(category) if category else '',
     }
-    return render(request, 'books/book_list.html', context) # Django sẽ tìm trong apps/books/templates/books
+    return render(request, 'books/book_list.html', context)
+
 
 def book_detail_view(request, slug):
+    book = get_object_or_404(Book, slug=slug)
+    context = {
+        'book': book,
+        'page_title': book.title,
+    }
+    return render(request, 'books/book_detail.html', context)
 
-    """Chi tiết sách"""
-    return HttpResponse(f'''
-    <h1>📖 Chi tiết sách: {slug}</h1>
-    <p>Thông tin chi tiết về cuốn sách này sẽ hiển thị ở đây.</p>
-    <a href="/books/">← Về danh sách sách</a>
-    ''')
+
 def register_view(request):
     if request.method == 'POST':
         form = UserCreationForm(request.POST)
@@ -45,9 +61,11 @@ def register_view(request):
         form = UserCreationForm()
     return render(request, 'user/register.html', {'form': form})
 
+
 @login_required
 def profile_view(request):
     return render(request, 'user/profile.html')
+
 
 @user_passes_test(lambda u: u.is_staff)
 def user_list(request):
@@ -64,17 +82,6 @@ def user_list(request):
 @user_passes_test(lambda u: u.is_staff)
 def delete_user(request, user_id):
     user = get_object_or_404(User, id=user_id)
-    if request.user != user:  # Không cho xóa chính mình
+    if request.user != user:
         user.delete()
     return redirect('books:user_list')
-
-    """
-    Hiển thị thông tin chi tiết của một cuốn sách.
-    """
-    book = get_object_or_404(Book, slug=slug) 
-    context = {
-        'book': book,
-        'page_title': book.title,
-    }
-    return render(request, 'books/book_detail.html', context) # Django sẽ tìm trong apps/books/templates/books
-
