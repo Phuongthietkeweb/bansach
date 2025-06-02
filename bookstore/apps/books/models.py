@@ -1,6 +1,13 @@
 from django.db import models
 from django.utils.text import slugify
 from django.contrib.auth.models import User
+
+class Category(models.Model):
+    name = models.CharField(max_length=100, verbose_name="Tên Danh Mục")
+
+    def __str__(self):
+        return self.name
+
 class Book(models.Model):
     title = models.CharField(max_length=200, verbose_name="Tên Sách")
     author = models.CharField(max_length=100, verbose_name="Tác Giả")
@@ -9,6 +16,7 @@ class Book(models.Model):
     price = models.DecimalField(max_digits=10, decimal_places=3, verbose_name="Giá")
     stock = models.IntegerField(verbose_name="Số Lượng Tồn Kho")
     image = models.ImageField(upload_to='books/', blank=True, null=True, verbose_name="Hình Ảnh")
+    category = models.ForeignKey(Category, on_delete=models.CASCADE, verbose_name="Thể Loại")  # Thêm ForeignKey cho Category
 
     class Meta:
         verbose_name = "Sách"
@@ -22,11 +30,3 @@ class Book(models.Model):
 
     def __str__(self):
         return self.title
-    
-class Category(models.Model):
-        name = models.CharField(max_length=100, verbose_name="Tên Danh Mục")
-    
-    def __str__(self):
-        return self.name
-
-
