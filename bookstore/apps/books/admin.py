@@ -31,5 +31,9 @@ class BookAdmin(admin.ModelAdmin):
         return "Không có ảnh"
     image_tag.short_description = 'Ảnh Sách'
     image_tag.allow_tags = True
+@admin.register(Category)
+class CategoryAdmin(admin.ModelAdmin):
+    list_display = ('name',)
+    search_fields = ('name',)
 
 
