@@ -5,7 +5,7 @@
 
 from django.contrib import admin
 from django.utils.html import format_html
-from .models import Book
+from .models import Book, Category
 
 @admin.register(Book)
 class BookAdmin(admin.ModelAdmin):
