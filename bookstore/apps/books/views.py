@@ -24,15 +24,19 @@ def book_list_view(request):
     if max_price:
         books = books.filter(price__lte=max_price)
     if category:
-        books = books.filter(category=category)
+        books = books.filter(category_id=category)
 
     paginator = Paginator(books.order_by('title'), 10)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
 
+    categories = Category.objects.all()
+
     context = {
         'page_obj': page_obj,
         'page_title': 'Danh Sách Sách',
+        'categories': categories,
+        'selected_category': int(category) if category else '',
     }
     return render(request, 'books/book_list.html', context)
 
