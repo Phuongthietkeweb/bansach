@@ -1,4 +1,3 @@
-
 from django.shortcuts import render
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
@@ -41,7 +40,7 @@ def register_view(request):
         if form.is_valid():
             form.save()
             messages.success(request, "Tạo tài khoản thành công!")
-            return redirect('login')
+            return redirect('books:login')
     else:
         form = UserCreationForm()
     return render(request, 'user/register.html', {'form': form})
