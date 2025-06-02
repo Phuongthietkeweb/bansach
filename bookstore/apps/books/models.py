@@ -23,7 +23,7 @@ class Book(models.Model):
     def __str__(self):
         return self.title
     
-    class Category(models.Model):
+class Category(models.Model):
         name = models.CharField(max_length=100, verbose_name="Tên Danh Mục")
     
     def __str__(self):
