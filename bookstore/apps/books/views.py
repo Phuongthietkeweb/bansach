@@ -9,6 +9,8 @@ from django.contrib import messages
 from django.contrib.auth.decorators import user_passes_test
 from django.shortcuts import render, redirect, get_object_or_404
 from django.db.models import Q
+from django.core.paginator import Paginator
+from .models import Book
 
 # apps/books/views.py
 
@@ -23,6 +25,26 @@ def book_list_view(request):
     books = Book.objects.all().order_by('title')
     context = {
         'books': books,
+        'page_title': 'Danh Sách Sách',
+    }
+    query = request.GET.get('q')  # Tìm kiếm theo tên sách
+    min_price = request.GET.get('min_price')  # Giá tối thiểu
+    max_price = request.GET.get('max_price')  # Giá tối đa
+    category = request.GET.get('category')  # Thể loại
+    books = Book.objects.all()
+    if query:
+        books = books.filter(title__icontains=query)
+    if min_price:
+        books = books.filter(price__gte=min_price)
+    if max_price:
+        books = books.filter(price__lte=max_price)
+    if category:
+        books = books.filter(category=category)
+    paginator = Paginator(books, 10)  # Hiển thị 10 sách mỗi trang
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+     context = {
+        'page_obj': page_obj,
         'page_title': 'Danh Sách Sách',
     }
     return render(request, 'books/book_list.html', context) # Django sẽ tìm trong apps/books/templates/books
