@@ -1,13 +1,9 @@
+{% extends 'base.html' %}
 {% load static %}
-<!DOCTYPE html>
-<html lang="vi">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ page_title }} - Chi Tiết Sách</title>
-    <link rel="stylesheet" href="{% static 'books/style.css' %}">
-</head>
-<body>
+
+{% block title %}{{ title }} - Bookstore{% endblock %}
+
+{% block content %}
     <div class="container detail-page">
         <h1>📖 Chi Tiết Sách</h1>
 
@@ -90,5 +86,4 @@
             {% endif %}
         </div>
     </div>
-</body>
-</html>
+{% endblock %}
