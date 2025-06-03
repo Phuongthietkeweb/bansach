@@ -11,57 +11,106 @@
 <div class="container">
     <h1>📚 {{ page_title }}</h1>
 
-    <form method="get" class="mb-4">
-        <input type="text" name="q" placeholder="Tìm kiếm theo tên sách" value="{{ request.GET.q }}">
-        <input type="number" name="min_price" placeholder="Giá tối thiểu" value="{{ request.GET.min_price }}">
-        <input type="number" name="max_price" placeholder="Giá tối đa" value="{{ request.GET.max_price }}">
-        <select name="category">
-            <option value="">Chọn thể loại</option>
-            {% for cat in categories %}
-                <option value="{{ cat.id }}" {% if selected_category == cat.id %}selected{% endif %}>{{ cat.name }}</option>
+    <!-- Danh sách Category -->
+    <div class="category-section">
+        <h2>🏷️ Thể Loại Sách</h2>
+        <div class="category-list">
+            <a href="?" class="category-btn {% if not selected_category %}active{% endif %}">
+                <span class="category-icon">📚</span>
+                <span>Tất Cả</span>
+                <span class="book-count">({{ page_obj.paginator.count }})</span>
+            </a>
+            {% for category in categories %}
+                <a href="?category={{ category.slug }}" class="category-btn {% if selected_category.slug == category.slug %}active{% endif %}">
+                    <span class="category-icon">🏷️</span>
+                    <span>{{ category.name }}</span>
+                    <span class="book-count">({{ category.get_books_count }})</span>
+                </a>
             {% endfor %}
-        </select>
-        <button type="submit">Tìm kiếm</button>
+        </div>
+    </div>
+
+    <!-- Form tìm kiếm -->
+    <form method="get" class="search-form">
+        {% if selected_category %}
+            <input type="hidden" name="category" value="{{ selected_category.slug }}">
+        {% endif %}
+        <div class="search-inputs">
+            <input type="text" name="q" placeholder="Tìm kiếm theo tên sách" value="{{ request.GET.q }}" class="search-input">
+            <input type="number" name="min_price" placeholder="Giá tối thiểu" value="{{ request.GET.min_price }}" class="price-input">
+            <input type="number" name="max_price" placeholder="Giá tối đa" value="{{ request.GET.max_price }}" class="price-input">
+            <button type="submit" class="search-btn">🔍 Tìm kiếm</button>
+        </div>
     </form>
 
+    <!-- Thông tin kết quả -->
+    {% if selected_category %}
+        <div class="category-info">
+            <h3>📖 Danh sách sách thuộc thể loại: <span class="category-name">{{ selected_category.name }}</span></h3>
+            {% if selected_category.description %}
+                <p class="category-description">{{ selected_category.description }}</p>
+            {% endif %}
+        </div>
+    {% endif %}
+
+    <!-- Danh sách sách -->
     {% if page_obj %}
         <div class="book-grid">
             {% for book in page_obj %}
                 <div class="book-card">
                     <a href="{% url 'books:detail' slug=book.slug %}">
                         {% if book.image %}
-                            <img src="{{ book.image.url }}" alt="{{ book.title }}">
+                            <img src="{{ book.image.url }}" alt="{{ book.title }}" class="book-image">
                         {% else %}
-                            <img src="{% static 'books/placeholder.png' %}" alt="No Image">
+                            <img src="{% static 'books/placeholder.png' %}" alt="No Image" class="book-image">
                         {% endif %}
                         <div class="book-card-info">
-                            <h3>{{ book.title }}</h3>
-                            <p class="author">{{ book.author }}</p>
-                            <p class="price">{{ book.price }} VNĐ</p>
+                            <h3 class="book-title">{{ book.title }}</h3>
+                            <p class="book-author">✍️ {{ book.author }}</p>
+                            {% if book.category %}
+                                <p class="book-category">🏷️ {{ book.category.name }}</p>
+                            {% endif %}
+                            <p class="book-price">💰 {{ book.price }} VNĐ</p>
+                            {% if book.stock > 0 %}
+                                <span class="stock-status in-stock">✅ Còn hàng ({{ book.stock }})</span>
+                            {% else %}
+                                <span class="stock-status out-of-stock">❌ Hết hàng</span>
+                            {% endif %}
                         </div>
                     </a>
                 </div>
             {% endfor %}
         </div>
     {% else %}
-        <p class="no-books">Hiện tại chưa có sách nào để hiển thị. Vui lòng quay lại sau!</p>
+        <div class="no-books">
+            <h3>📭 Không tìm thấy sách nào</h3>
+            {% if selected_category %}
+                <p>Hiện tại chưa có sách nào thuộc thể loại <strong>{{ selected_category.name }}</strong>.</p>
+                <a href="?" class="btn-back">← Xem tất cả sách</a>
+            {% else %}
+                <p>Hiện tại chưa có sách nào để hiển thị. Vui lòng quay lại sau!</p>
+            {% endif %}
+        </div>
     {% endif %}
 
-    <div class="pagination">
-        <span class="step-links">
-            {% if page_obj.has_previous %}
-                <a href="?page=1">&laquo; Trang đầu</a>
-                <a href="?page={{ page_obj.previous_page_number }}">Trang trước</a>
-            {% endif %}
-            <span class="current">
-                Trang {{ page_obj.number }} của {{ page_obj.paginator.num_pages }}.
+    <!-- Phân trang -->
+    {% if page_obj.paginator.num_pages > 1 %}
+        <div class="pagination">
+            <span class="step-links">
+                {% if page_obj.has_previous %}
+                    <a href="?{% if selected_category %}category={{ selected_category.slug }}&{% endif %}{% if request.GET.q %}q={{ request.GET.q }}&{% endif %}{% if request.GET.min_price %}min_price={{ request.GET.min_price }}&{% endif %}{% if request.GET.max_price %}max_price={{ request.GET.max_price }}&{% endif %}page=1" class="page-link">« Trang đầu</a>
+                    <a href="?{% if selected_category %}category={{ selected_category.slug }}&{% endif %}{% if request.GET.q %}q={{ request.GET.q }}&{% endif %}{% if request.GET.min_price %}min_price={{ request.GET.min_price }}&{% endif %}{% if request.GET.max_price %}max_price={{ request.GET.max_price }}&{% endif %}page={{ page_obj.previous_page_number }}" class="page-link">‹ Trang trước</a>
+                {% endif %}
+                <span class="current-page">
+                    Trang {{ page_obj.number }} / {{ page_obj.paginator.num_pages }}
+                </span>
+                {% if page_obj.has_next %}
+                    <a href="?{% if selected_category %}category={{ selected_category.slug }}&{% endif %}{% if request.GET.q %}q={{ request.GET.q }}&{% endif %}{% if request.GET.min_price %}min_price={{ request.GET.min_price }}&{% endif %}{% if request.GET.max_price %}max_price={{ request.GET.max_price }}&{% endif %}page={{ page_obj.next_page_number }}" class="page-link">Trang sau ›</a>
+                    <a href="?{% if selected_category %}category={{ selected_category.slug }}&{% endif %}{% if request.GET.q %}q={{ request.GET.q }}&{% endif %}{% if request.GET.min_price %}min_price={{ request.GET.min_price }}&{% endif %}{% if request.GET.max_price %}max_price={{ request.GET.max_price }}&{% endif %}page={{ page_obj.paginator.num_pages }}" class="page-link">Trang cuối »</a>
+                {% endif %}
             </span>
-            {% if page_obj.has_next %}
-                <a href="?page={{ page_obj.next_page_number }}">Trang sau</a>
-                <a href="?page={{ page_obj.paginator.num_pages }}">Trang cuối &raquo;</a>
-            {% endif %}
-        </span>
-    </div>
+        </div>
+    {% endif %}
 </div>
 </body>
 </html>

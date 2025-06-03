@@ -23,17 +23,71 @@
             {% endif %}
             <div class="book-info">
                 <h2>{{ book.title }}</h2>
-                <p><strong>Tác giả:</strong> {{ book.author }}</p>
-                <p><strong>Thể loại:</strong> (Bạn có thể thêm trường này vào model)</p>
-                <p><strong>Giá:</strong> {{ book.price }} VNĐ</p>
-                <p><strong>Số lượng sách còn:</strong> {{ book.stock }} cuốn</p>
-                <h3>Mô tả về sách:</h3>
-                <p>{{ book.description }}</p>
+                <p><strong>✍️ Tác giả:</strong> {{ book.author }}</p>
+                
+                {% if book.category %}
+                    <p><strong>🏷️ Thể loại:</strong> 
+                        <a href="{% url 'books:list' %}?category={{ book.category.slug }}" class="category-link">
+                            {{ book.category.name }}
+                        </a>
+                    </p>
+                {% endif %}
+                
+                <p><strong>💰 Giá:</strong> <span class="price-highlight">{{ book.price }} VNĐ</span></p>
+                
+                <p><strong>📦 Tình trạng:</strong> 
+                    {% if book.stock > 0 %}
+                        <span class="stock-status in-stock">✅ Còn hàng ({{ book.stock }} cuốn)</span>
+                    {% else %}
+                        <span class="stock-status out-of-stock">❌ Hết hàng</span>
+                    {% endif %}
+                </p>
+                
+                <h3>📝 Mô tả về sách:</h3>
+                <div class="book-description">
+                    {{ book.description|linebreaks }}
+                </div>
             </div>
         </div>
 
+        <!-- Sách cùng thể loại -->
+        {% if related_books %}
+            <div class="related-books-section">
+                <h2>📚 Sách cùng thể loại: {{ book.category.name }}</h2>
+                <div class="related-books-grid">
+                    {% for related_book in related_books %}
+                        <div class="related-book-card">
+                            <a href="{% url 'books:detail' slug=related_book.slug %}">
+                                {% if related_book.image %}
+                                    <img src="{{ related_book.image.url }}" alt="{{ related_book.title }}" class="related-book-image">
+                                {% else %}
+                                    <img src="{% static 'books/placeholder.png' %}" alt="No Image" class="related-book-image">
+                                {% endif %}
+                                <div class="related-book-info">
+                                    <h4>{{ related_book.title }}</h4>
+                                    <p class="related-book-author">{{ related_book.author }}</p>
+                                    <p class="related-book-price">{{ related_book.price }} VNĐ</p>
+                                </div>
+                            </a>
+                        </div>
+                    {% endfor %}
+                </div>
+                
+                {% if book.category %}
+                    <div class="view-all-category">
+                        <a href="{% url 'books:list' %}?category={{ book.category.slug }}" class="btn-view-all">
+                            🔍 Xem tất cả sách {{ book.category.name }} →
+                        </a>
+                    </div>
+                {% endif %}
+            </div>
+        {% endif %}
+
         <div class="footer-link">
             <a href="{% url 'books:list' %}">← Về danh sách sách</a>
+            {% if book.category %}
+                <a href="{% url 'books:list' %}?category={{ book.category.slug }}">📖 Xem thêm {{ book.category.name }}</a>
+            {% endif %}
         </div>
     </div>
 </body>
