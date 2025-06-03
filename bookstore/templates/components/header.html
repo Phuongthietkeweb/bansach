@@ -51,9 +51,11 @@
                 <li class="nav-item">
                     <a class="nav-link position-relative" href="{% url 'cart:detail' %}">
                         🛒 Giỏ hàng
-                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" id="cart-count">
-                            0
-                        </span>
+                        {% if cart_count > 0 %}
+                            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                                {{ cart_count }}
+                            </span>
+                        {% endif %}
                     </a>
                 </li>
                 <li class="nav-item">
@@ -62,4 +64,43 @@
             </ul>
         </div>
     </div>
-</nav> 
+</nav>
+
+<style>
+.navbar-brand {
+    font-weight: bold;
+    font-size: 1.5rem;
+}
+
+.nav-link {
+    transition: color 0.3s ease;
+}
+
+.nav-link:hover {
+    color: #ffc107 !important;
+}
+
+.badge {
+    font-size: 0.7rem;
+    min-width: 18px;
+    height: 18px;
+    line-height: 18px;
+    text-align: center;
+}
+
+/* Hiệu ứng cho giỏ hàng */
+.nav-item:has([href*="cart"]) .nav-link {
+    background: linear-gradient(45deg, #28a745, #20c997);
+    border-radius: 20px;
+    padding: 8px 15px !important;
+    margin: 0 5px;
+    color: white !important;
+    transition: all 0.3s ease;
+}
+
+.nav-item:has([href*="cart"]) .nav-link:hover {
+    background: linear-gradient(45deg, #1e7e34, #17a2b8);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}
+</style> 

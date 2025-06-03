@@ -54,7 +54,7 @@
         <div class="book-grid">
             {% for book in page_obj %}
                 <div class="book-card">
-                    <a href="{% url 'books:detail' slug=book.slug %}">
+                    <a href="{% url 'books:detail' slug=book.slug %}" class="book-link">
                         {% if book.image %}
                             <img src="{{ book.image.url }}" alt="{{ book.title }}" class="book-image">
                         {% else %}
@@ -74,6 +74,22 @@
                             {% endif %}
                         </div>
                     </a>
+                    
+                    <!-- Nút thêm vào giỏ hàng -->
+                    <div class="book-actions">
+                        {% if book.stock > 0 %}
+                            <a href="{% url 'cart:add' book_id=book.id %}" class="btn-add-to-cart">
+                                🛒 Thêm vào giỏ hàng
+                            </a>
+                        {% else %}
+                            <button class="btn-out-of-stock" disabled>
+                                ❌ Hết hàng
+                            </button>
+                        {% endif %}
+                        <a href="{% url 'books:detail' slug=book.slug %}" class="btn-view-detail">
+                            👁️ Xem chi tiết
+                        </a>
+                    </div>
                 </div>
             {% endfor %}
         </div>
@@ -108,4 +124,157 @@
         </div>
     {% endif %}
 </div>
+
+<style>
+/* Thêm styles cho nút giỏ hàng */
+.book-card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.book-link {
+    flex-grow: 1;
+    text-decoration: none;
+    color: inherit;
+}
+
+.book-actions {
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-top: auto;
+}
+
+.btn-add-to-cart, .btn-out-of-stock, .btn-view-detail {
+    padding: 8px 12px;
+    border-radius: 5px;
+    text-decoration: none;
+    font-weight: bold;
+    text-align: center;
+    font-size: 14px;
+    transition: all 0.3s ease;
+    border: none;
+    cursor: pointer;
+}
+
+.btn-add-to-cart {
+    background: #28a745;
+    color: white;
+}
+
+.btn-add-to-cart:hover {
+    background: #1e7e34;
+    transform: translateY(-1px);
+    box-shadow: 0 2px 8px rgba(40, 167, 69, 0.3);
+}
+
+.btn-out-of-stock {
+    background: #dc3545;
+    color: white;
+    opacity: 0.7;
+}
+
+.btn-view-detail {
+    background: #007bff;
+    color: white;
+}
+
+.btn-view-detail:hover {
+    background: #0056b3;
+    transform: translateY(-1px);
+    box-shadow: 0 2px 8px rgba(0, 123, 255, 0.3);
+}
+
+/* Cải thiện book-card */
+.book-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 20px;
+    margin: 20px 0;
+}
+
+.book-card {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 0;
+    background: white;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    transition: all 0.3s ease;
+    overflow: hidden;
+}
+
+.book-card:hover {
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    transform: translateY(-2px);
+}
+
+.book-image {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+}
+
+.book-card-info {
+    padding: 15px;
+}
+
+.book-title {
+    font-size: 16px;
+    font-weight: bold;
+    margin: 0 0 8px 0;
+    color: #333;
+    line-height: 1.3;
+}
+
+.book-author, .book-category {
+    font-size: 14px;
+    color: #666;
+    margin: 4px 0;
+}
+
+.book-price {
+    font-size: 16px;
+    font-weight: bold;
+    color: #e74c3c;
+    margin: 8px 0;
+}
+
+.stock-status {
+    font-size: 12px;
+    padding: 4px 8px;
+    border-radius: 12px;
+    display: inline-block;
+}
+
+.stock-status.in-stock {
+    background: #d4edda;
+    color: #155724;
+}
+
+.stock-status.out-of-stock {
+    background: #f8d7da;
+    color: #721c24;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .book-grid {
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        gap: 15px;
+    }
+    
+    .book-actions {
+        padding: 8px;
+        gap: 6px;
+    }
+    
+    .btn-add-to-cart, .btn-out-of-stock, .btn-view-detail {
+        padding: 6px 10px;
+        font-size: 13px;
+    }
+}
+</style>
 {% endblock %}
