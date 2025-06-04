@@ -1,0 +1,242 @@
+/* Styles cho phần thêm vào giỏ hàng */
+.container {
+    background-color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    padding: 30px;
+    margin-top: 50px;
+    width: 90%;
+    max-width: 1200px;
+    box-sizing: border-box;
+    display: flex;
+    margin-left: auto;
+    margin-right: auto;
+}
+.add-to-cart-section {
+    margin: 20px 0;
+    padding: 20px;
+    background: #f8f9fa;
+    border-radius: 8px;
+    border: 2px solid #e9ecef;
+}
+
+.add-to-cart-form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.quantity-selector {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.quantity-selector label {
+    font-weight: bold;
+    color: #333;
+}
+
+.quantity-controls {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.qty-btn {
+    width: 35px;
+    height: 35px;
+    border: 1px solid #ddd;
+    background: white;
+    cursor: pointer;
+    border-radius: 5px;
+    font-weight: bold;
+    font-size: 16px;
+    transition: all 0.3s;
+}
+
+.qty-btn:hover {
+    background: #e9ecef;
+    border-color: #007bff;
+}
+
+.quantity-input {
+    width: 80px;
+    padding: 8px;
+    text-align: center;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.btn-add-to-cart-detail {
+    padding: 12px 24px;
+    background: #28a745;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s;
+    align-self: flex-start;
+}
+
+.btn-add-to-cart-detail:hover {
+    background: #1e7e34;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(40, 167, 69, 0.3);
+}
+
+.out-of-stock-notice {
+    text-align: center;
+}
+
+.btn-out-of-stock-detail {
+    padding: 12px 24px;
+    background: #dc3545;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    font-weight: bold;
+    opacity: 0.7;
+    cursor: not-allowed;
+}
+
+.stock-notice {
+    margin-top: 10px;
+    color: #721c24;
+    font-style: italic;
+}
+
+/* Cải thiện related books */
+.related-book-card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+}
+
+.related-book-link {
+    flex-grow: 1;
+    text-decoration: none;
+    color: inherit;
+}
+
+.related-book-actions {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    z-index: 2;
+}
+
+.btn-add-related {
+    display: inline-block;
+    width: 35px;
+    height: 35px;
+    background: #28a745;
+    color: white;
+    border-radius: 50%;
+    text-align: center;
+    line-height: 35px;
+    text-decoration: none;
+    font-size: 14px;
+    transition: all 0.3s;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+.btn-add-related:hover {
+    background: #1e7e34;
+    transform: scale(1.1);
+}
+
+.btn-out-of-stock-related {
+    display: inline-block;
+    width: 35px;
+    height: 35px;
+    background: #dc3545;
+    color: white;
+    border-radius: 50%;
+    text-align: center;
+    line-height: 35px;
+    font-size: 14px;
+    opacity: 0.7;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+/* Cải thiện book detail layout */
+.book-detail-content {
+    display: grid;
+    grid-template-columns: 300px 1fr;
+    gap: 30px;
+    margin-bottom: 40px;
+}
+
+.book-image img {
+    width: 100%;
+    max-width: 300px;
+    height: auto;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.book-info h2 {
+    color: #333;
+    margin-bottom: 20px;
+    font-size: 24px;
+}
+
+.price-highlight {
+    color: #e74c3c;
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.category-link {
+    color: #007bff;
+    text-decoration: none;
+}
+
+.category-link:hover {
+    text-decoration: underline;
+}
+
+.stock-status {
+    padding: 6px 12px;
+    border-radius: 15px;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.stock-status.in-stock {
+    background: #d4edda;
+    color: #155724;
+}
+
+.stock-status.out-of-stock {
+    background: #f8d7da;
+    color: #721c24;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .book-detail-content {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+    
+    .add-to-cart-form {
+        align-items: center;
+        text-align: center;
+    }
+    
+    .quantity-selector {
+        flex-direction: column;
+        gap: 8px;
+    }
+    
+    .btn-add-to-cart-detail {
+        width: 100%;
+    }
+}

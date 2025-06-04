@@ -4,362 +4,127 @@
 {% block title %}{{ title }} - Bookstore{% endblock %}
 
 {% block content %}
+<link rel="stylesheet" href="{% static 'css/book_detail.css' %}">
     <div class="container detail-page">
-        <h1>📖 Chi Tiết Sách</h1>
-
-        <div class="book-detail-content">
-            {% if book.image %}
-                <div class="book-image">
-                    <img src="{{ book.image.url }}" alt="{{ book.title }}">
-                </div>
-            {% else %}
-                <div class="book-image">
-                    <img src="{% static 'books/placeholder.png' %}" alt="No Image">
-                </div>
-            {% endif %}
-            <div class="book-info">
-                <h2>{{ book.title }}</h2>
-                <p><strong>✍️ Tác giả:</strong> {{ book.author }}</p>
-                
-                {% if book.category %}
-                    <p><strong>🏷️ Thể loại:</strong> 
-                        <a href="{% url 'books:list' %}?category={{ book.category.slug }}" class="category-link">
-                            {{ book.category.name }}
-                        </a>
-                    </p>
-                {% endif %}
-                
-                <p><strong>💰 Giá:</strong> <span class="price-highlight">{{ book.price }} VNĐ</span></p>
-                
-                <p><strong>📦 Tình trạng:</strong> 
-                    {% if book.stock > 0 %}
-                        <span class="stock-status in-stock">✅ Còn hàng ({{ book.stock }} cuốn)</span>
-                    {% else %}
-                        <span class="stock-status out-of-stock">❌ Hết hàng</span>
-                    {% endif %}
-                </p>
-                
-                <!-- Form thêm vào giỏ hàng -->
-                <div class="add-to-cart-section">
-                    {% if book.stock > 0 %}
-                        <form method="post" action="{% url 'cart:add' book_id=book.id %}" class="add-to-cart-form">
-                            {% csrf_token %}
-                            <div class="quantity-selector">
-                                <label for="quantity">Số lượng:</label>
-                                <div class="quantity-controls">
-                                    <button type="button" class="qty-btn qty-minus">-</button>
-                                    <input type="number" 
-                                           id="quantity" 
-                                           name="quantity" 
-                                           value="1" 
-                                           min="1" 
-                                           max="{{ book.stock }}"
-                                           class="quantity-input">
-                                    <button type="button" class="qty-btn qty-plus">+</button>
-                                </div>
-                            </div>
-                            <button type="submit" class="btn-add-to-cart-detail">
-                                🛒 Thêm vào giỏ hàng
-                            </button>
-                        </form>
-                    {% else %}
-                        <div class="out-of-stock-notice">
-                            <button class="btn-out-of-stock-detail" disabled>
-                                ❌ Hết hàng
-                            </button>
-                            <p class="stock-notice">Sản phẩm này hiện đã hết hàng. Vui lòng quay lại sau!</p>
-                        </div>
-                    {% endif %}
-                </div>
-                
-                <h3>📝 Mô tả về sách:</h3>
-                <div class="book-description">
-                    {{ book.description|linebreaks }}
-                </div>
+<div style="width: 100%;">
+    <div class="book-detail-content">
+        {% if book.image %}
+            <div class="book-image">
+                <img src="{{ book.image.url }}" alt="{{ book.title }}">
             </div>
-        </div>
-
-        <!-- Sách cùng thể loại -->
-        {% if related_books %}
-            <div class="related-books-section">
-                <h2>📚 Sách cùng thể loại: {{ book.category.name }}</h2>
-                <div class="related-books-grid">
-                    {% for related_book in related_books %}
-                        <div class="related-book-card">
-                            <a href="{% url 'books:detail' slug=related_book.slug %}" class="related-book-link">
-                                {% if related_book.image %}
-                                    <img src="{{ related_book.image.url }}" alt="{{ related_book.title }}" class="related-book-image">
-                                {% else %}
-                                    <img src="{% static 'books/placeholder.png' %}" alt="No Image" class="related-book-image">
-                                {% endif %}
-                                <div class="related-book-info">
-                                    <h4>{{ related_book.title }}</h4>
-                                    <p class="related-book-author">{{ related_book.author }}</p>
-                                    <p class="related-book-price">{{ related_book.price }} VNĐ</p>
-                                </div>
-                            </a>
-                            <div class="related-book-actions">
-                                {% if related_book.stock > 0 %}
-                                    <a href="{% url 'cart:add' book_id=related_book.id %}" class="btn-add-related">
-                                        🛒
-                                    </a>
-                                {% else %}
-                                    <span class="btn-out-of-stock-related">❌</span>
-                                {% endif %}
+        {% else %}
+            <div class="book-image">
+                <img src="{% static 'books/placeholder.png' %}" alt="No Image">
+            </div>
+        {% endif %}
+        <div class="book-info">
+            <h2>{{ book.title }}</h2>
+            <p><strong>✍️ Tác giả:</strong> {{ book.author }}</p>
+            
+            {% if book.category %}
+                <p><strong>🏷️ Thể loại:</strong> 
+                    <a href="{% url 'books:list' %}?category={{ book.category.slug }}" class="category-link">
+                        {{ book.category.name }}
+                    </a>
+                </p>
+            {% endif %}
+            
+            <p><strong>💰 Giá:</strong> <span class="price-highlight">{{ book.price }} VNĐ</span></p>
+            
+            <p><strong>📦 Tình trạng:</strong> 
+                {% if book.stock > 0 %}
+                    <span class="stock-status in-stock">✅ Còn hàng ({{ book.stock }} cuốn)</span>
+                {% else %}
+                    <span class="stock-status out-of-stock">❌ Hết hàng</span>
+                {% endif %}
+            </p>
+            
+            <!-- Form thêm vào giỏ hàng -->
+            <div class="add-to-cart-section">
+                {% if book.stock > 0 %}
+                    <form method="post" action="{% url 'cart:add' book_id=book.id %}" class="add-to-cart-form">
+                        {% csrf_token %}
+                        <div class="quantity-selector">
+                            <label for="quantity">Số lượng:</label>
+                            <div class="quantity-controls">
+                                <button type="button" class="qty-btn qty-minus">-</button>
+                                <input type="number" 
+                                       id="quantity" 
+                                       name="quantity" 
+                                       value="1" 
+                                       min="1" 
+                                       max="{{ book.stock }}"
+                                       class="quantity-input">
+                                <button type="button" class="qty-btn qty-plus">+</button>
                             </div>
                         </div>
-                    {% endfor %}
-                </div>
-                
-                {% if book.category %}
-                    <div class="view-all-category">
-                        <a href="{% url 'books:list' %}?category={{ book.category.slug }}" class="btn-view-all">
-                            🔍 Xem tất cả sách {{ book.category.name }} →
-                        </a>
+                        <button type="submit" class="btn-add-to-cart-detail">
+                            🛒 Thêm vào giỏ hàng
+                        </button>
+                    </form>
+                {% else %}
+                    <div class="out-of-stock-notice">
+                        <button class="btn-out-of-stock-detail" disabled>
+                            ❌ Hết hàng
+                        </button>
+                        <p class="stock-notice">Sản phẩm này hiện đã hết hàng. Vui lòng quay lại sau!</p>
                     </div>
                 {% endif %}
             </div>
-        {% endif %}
-
-        <div class="footer-link">
-            <a href="{% url 'books:list' %}">← Về danh sách sách</a>
-            {% if book.category %}
-                <a href="{% url 'books:list' %}?category={{ book.category.slug }}">📖 Xem thêm {{ book.category.name }}</a>
-            {% endif %}
+            
+            <h3>📝 Mô tả về sách:</h3>
+            <div class="book-description">
+                {{ book.description|linebreaks }}
+            </div>
         </div>
     </div>
 
-<style>
-/* Styles cho phần thêm vào giỏ hàng */
-.add-to-cart-section {
-    margin: 20px 0;
-    padding: 20px;
-    background: #f8f9fa;
-    border-radius: 8px;
-    border: 2px solid #e9ecef;
-}
+    <!-- Sách cùng thể loại -->
+    {% if related_books %}
+        <div class="related-books-section">
+            <h2>📚 Sách cùng thể loại: {{ book.category.name }}</h2>
+            <div class="related-books-grid">
+                {% for related_book in related_books %}
+                    <div class="related-book-card">
+                        <a href="{% url 'books:detail' slug=related_book.slug %}" class="related-book-link">
+                            {% if related_book.image %}
+                                <img src="{{ related_book.image.url }}" alt="{{ related_book.title }}" class="related-book-image">
+                            {% else %}
+                                <img src="{% static 'books/placeholder.png' %}" alt="No Image" class="related-book-image">
+                            {% endif %}
+                            <div class="related-book-info">
+                                <h4>{{ related_book.title }}</h4>
+                                <p class="related-book-author">{{ related_book.author }}</p>
+                                <p class="related-book-price">{{ related_book.price }} VNĐ</p>
+                            </div>
+                        </a>
+                        <div class="related-book-actions">
+                            {% if related_book.stock > 0 %}
+                                <a href="{% url 'cart:add' book_id=related_book.id %}" class="btn-add-related">
+                                    🛒
+                                </a>
+                            {% else %}
+                                <span class="btn-out-of-stock-related">❌</span>
+                            {% endif %}
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+            
+            {% if book.category %}
+                <div class="view-all-category">
+                    <a href="{% url 'books:list' %}?category={{ book.category.slug }}" class="btn-view-all">
+                        🔍 Xem tất cả sách {{ book.category.name }} →
+                    </a>
+                </div>
+            {% endif %}
+        </div>
+    {% endif %}
 
-.add-to-cart-form {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-}
+</div>
+    </div>
 
-.quantity-selector {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
 
-.quantity-selector label {
-    font-weight: bold;
-    color: #333;
-}
-
-.quantity-controls {
-    display: flex;
-    align-items: center;
-    gap: 5px;
-}
-
-.qty-btn {
-    width: 35px;
-    height: 35px;
-    border: 1px solid #ddd;
-    background: white;
-    cursor: pointer;
-    border-radius: 5px;
-    font-weight: bold;
-    font-size: 16px;
-    transition: all 0.3s;
-}
-
-.qty-btn:hover {
-    background: #e9ecef;
-    border-color: #007bff;
-}
-
-.quantity-input {
-    width: 80px;
-    padding: 8px;
-    text-align: center;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    font-size: 16px;
-    font-weight: bold;
-}
-
-.btn-add-to-cart-detail {
-    padding: 12px 24px;
-    background: #28a745;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    font-size: 16px;
-    font-weight: bold;
-    cursor: pointer;
-    transition: all 0.3s;
-    align-self: flex-start;
-}
-
-.btn-add-to-cart-detail:hover {
-    background: #1e7e34;
-    transform: translateY(-1px);
-    box-shadow: 0 4px 12px rgba(40, 167, 69, 0.3);
-}
-
-.out-of-stock-notice {
-    text-align: center;
-}
-
-.btn-out-of-stock-detail {
-    padding: 12px 24px;
-    background: #dc3545;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    font-size: 16px;
-    font-weight: bold;
-    opacity: 0.7;
-    cursor: not-allowed;
-}
-
-.stock-notice {
-    margin-top: 10px;
-    color: #721c24;
-    font-style: italic;
-}
-
-/* Cải thiện related books */
-.related-book-card {
-    position: relative;
-    display: flex;
-    flex-direction: column;
-}
-
-.related-book-link {
-    flex-grow: 1;
-    text-decoration: none;
-    color: inherit;
-}
-
-.related-book-actions {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    z-index: 2;
-}
-
-.btn-add-related {
-    display: inline-block;
-    width: 35px;
-    height: 35px;
-    background: #28a745;
-    color: white;
-    border-radius: 50%;
-    text-align: center;
-    line-height: 35px;
-    text-decoration: none;
-    font-size: 14px;
-    transition: all 0.3s;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
-}
-
-.btn-add-related:hover {
-    background: #1e7e34;
-    transform: scale(1.1);
-}
-
-.btn-out-of-stock-related {
-    display: inline-block;
-    width: 35px;
-    height: 35px;
-    background: #dc3545;
-    color: white;
-    border-radius: 50%;
-    text-align: center;
-    line-height: 35px;
-    font-size: 14px;
-    opacity: 0.7;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
-}
-
-/* Cải thiện book detail layout */
-.book-detail-content {
-    display: grid;
-    grid-template-columns: 300px 1fr;
-    gap: 30px;
-    margin-bottom: 40px;
-}
-
-.book-image img {
-    width: 100%;
-    max-width: 300px;
-    height: auto;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-}
-
-.book-info h2 {
-    color: #333;
-    margin-bottom: 20px;
-    font-size: 24px;
-}
-
-.price-highlight {
-    color: #e74c3c;
-    font-size: 20px;
-    font-weight: bold;
-}
-
-.category-link {
-    color: #007bff;
-    text-decoration: none;
-}
-
-.category-link:hover {
-    text-decoration: underline;
-}
-
-.stock-status {
-    padding: 6px 12px;
-    border-radius: 15px;
-    font-size: 14px;
-    font-weight: bold;
-}
-
-.stock-status.in-stock {
-    background: #d4edda;
-    color: #155724;
-}
-
-.stock-status.out-of-stock {
-    background: #f8d7da;
-    color: #721c24;
-}
-
-/* Responsive */
-@media (max-width: 768px) {
-    .book-detail-content {
-        grid-template-columns: 1fr;
-        gap: 20px;
-    }
-    
-    .add-to-cart-form {
-        align-items: center;
-        text-align: center;
-    }
-    
-    .quantity-selector {
-        flex-direction: column;
-        gap: 8px;
-    }
-    
-    .btn-add-to-cart-detail {
-        width: 100%;
-    }
-}
-</style>
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {

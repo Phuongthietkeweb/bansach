@@ -24,13 +24,13 @@ urlpatterns = [
     # Admin routes
     path('admin/', admin.site.urls),
     
-    # User routes
-    path('', include('pages.urls')),           # Trang chủ, about, contact
-    path('books/', include('books.urls',namespace='books')),     # Danh sách sách, chi tiết sách
+    # More specific routes first
     path('cart/', include('cart.urls')),       # Giỏ hàng
     path('orders/', include('orders.urls')),   # Đơn hàng, thanh toán
     path('accounts/', include('accounts.urls')),
     
+    # General routes last
+    path('', include('books.urls')),           # Trang chủ, about, contact (includes slug pattern)
 ]
 
 # Serve media files trong development

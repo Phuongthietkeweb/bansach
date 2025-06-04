@@ -1,31 +1,64 @@
-<footer class="bg-dark text-white py-4 mt-5">
-    <div class="container">
-        <div class="row">
-            <div class="col-md-6">
-                <h5>📚 Bookstore</h5>
-                <p>Cửa hàng sách online uy tín, chất lượng cao.</p>
+
+{% load static %}
+<link rel="stylesheet" href="{% static 'css/footer.css' %}">
+
+<footer class="footer">
+    <div class="footer-container">
+        <div class="footer-content">
+            <!-- Logo and Contact Info Section -->
+            <div class="footer-section logo-section">
+                <div class="footer-logo">
+                    <div class="logo-icon"></div>
+                    <span class="logo-text">OGANI</span>
+                </div>
+                <div class="contact-info">
+                    <p><strong>Address:</strong> 60-49 Road 11378 New York</p>
+                    <p><strong>Phone:</strong> +65 11.188.888</p>
+                    <p><strong>Email:</strong> hello@colorlib.com</p>
+                </div>
             </div>
-            <div class="col-md-3">
-                <h6>Liên kết</h6>
-                <ul class="list-unstyled">
-                    <li><a href="{% url 'pages:home' %}" class="text-white-50">Trang chủ</a></li>
-                    <li><a href="{% url 'books:list' %}" class="text-white-50">Sách</a></li>
-                    <li><a href="{% url 'pages:about' %}" class="text-white-50">Giới thiệu</a></li>
-                    <li><a href="{% url 'pages:contact' %}" class="text-white-50">Liên hệ</a></li>
+
+            <!-- Useful Links Section -->
+            <div class="footer-section links-section">
+                <h3>Useful Links</h3>
+                <ul class="footer-links">
+                    <li><a href="#">About Us</a></li>
+                    <li><a href="#">About Our Shop</a></li>
+                    <li><a href="#">Secure Shopping</a></li>
+                    <li><a href="#">Delivery infomation</a></li>
+                    <li><a href="#">Privacy Policy</a></li>
+                    <li><a href="#">Our Sitemap</a></li>
                 </ul>
             </div>
-            <div class="col-md-3">
-                <h6>Liên hệ</h6>
-                <p class="text-white-50">
-                    📧 contact@bookstore.com<br>
-                    📞 0123 456 789<br>
-                    📍 123 Đường ABC, TP.HCM
-                </p>
+
+            <!-- Additional Links Section -->
+            <div class="footer-section links-section">
+                <ul class="footer-links secondary-links">
+                    <li><a href="#">Who We Are</a></li>
+                    <li><a href="#">Our Services</a></li>
+                    <li><a href="#">Projects</a></li>
+                    <li><a href="#">Contact</a></li>
+                    <li><a href="#">Innovation</a></li>
+                    <li><a href="#">Testimonials</a></li>
+                </ul>
             </div>
-        </div>
-        <hr class="my-4">
-        <div class="text-center">
-            <p class="mb-0">&copy; 2024 Bookstore. All rights reserved.</p>
+
+            <!-- Newsletter Section -->
+            <div class="footer-section newsletter-section">
+                <h3>Join Our Newsletter Now</h3>
+                <p>Get E-mail updates about our latest shop and special offers.</p>
+                <div class="newsletter-form">
+                    <input type="email" placeholder="Enter your mail" class="email-input">
+                    <button type="submit" class="subscribe-btn">SUBSCRIBE</button>
+                </div>
+                <div class="social-icons">
+                    <a href="#" class="social-icon"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#" class="social-icon"><i class="fab fa-instagram"></i></a>
+                    <a href="#" class="social-icon"><i class="fab fa-twitter"></i></a>
+                    <a href="#" class="social-icon"><i class="fab fa-pinterest-p"></i></a>
+                </div>
+            </div>
         </div>
     </div>
 </footer> 
+

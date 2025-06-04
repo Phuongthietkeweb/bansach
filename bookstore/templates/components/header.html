@@ -1,106 +1,50 @@
 {% load static %}
+<link rel="stylesheet" href="{% static 'css/header.css' %}">
+    <header class="header">
+        <div class="header-container">
+            <!-- Logo Section -->
+            <a href="{% url 'books:list' %}" class="logo">
+                <div class="logo-icon"></div>
+                <span class="logo-text">OGANI</span>
+            </a>
 
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-    <div class="container">
-        <a class="navbar-brand" href="{% url 'pages:home' %}">
-            📚 Bookstore
-        </a>
-        
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        
-        <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav me-auto">
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'pages:home' %}">Trang chủ</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'books:list' %}">Sách</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'pages:about' %}">Giới thiệu</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'pages:contact' %}">Liên hệ</a>
-                </li>
-                {% if user.is_authenticated %}
-                    <li class="nav-item">
-                        <a class="nav-link">Xin chào {{ user.username }}</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'books:profile' %}">Thông tin cá nhân</a>
-                    </li>
-                    
-                    <form method="post" action="{% url 'books:logout' %}">
-                        {% csrf_token %}
-                        <button type="submit" class="nav-link btn btn-link" >Đăng xuất</button>
-                    </form>
+            <!-- Navigation Menu -->
+            <nav>
+                <ul class="nav-menu">
+                    <li><a href="{% url 'books:list' %}" class="{% if request.resolver_match.url_name == 'list' %}active{% endif %}">HOME</a></li>
+                    <li><a href="{% url 'books:list' %}">SHOP</a></li>
+                    <li><a href="#">PAGES</a></li>
+                    <li><a href="#">BLOG</a></li>
+                    <li><a href="#">CONTACT</a></li>
+                </ul>
+            </nav>
 
-                {% else %}
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'books:login' %}">Đăng nhập</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'books:register' %}">Đăng ký</a>
-                    </li>
-                {% endif %}
-            </ul>
-            
-            <ul class="navbar-nav">
-                <li class="nav-item">
-                    <a class="nav-link position-relative" href="{% url 'cart:detail' %}">
-                        🛒 Giỏ hàng
+            <!-- Header Right Section -->
+            <div class="header-right">
+                <!-- Heart/Wishlist Icon -->
+                <button class="icon-btn">
+                    <i class="far fa-heart"></i>
+                    <span class="badge">0</span>
+                </button>
+
+                <!-- Shopping Cart Icon -->
+                <a href="{% url 'cart:detail' %}" class="icon-btn cart-link">
+                    <i class="fa fa-shopping-bag"></i>
+                    <span class="badge cart-count-badge">{{ cart_count|default:0 }}</span>
+                </a>
+
+                <!-- Cart Info -->
+                <div class="cart-info">
+                    <a href="{% url 'cart:detail' %}" class="cart-link-text">
                         {% if cart_count > 0 %}
-                            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-                                {{ cart_count }}
-                            </span>
+                            {{ cart_count }} sản phẩm
+                        {% else %}
+                            Giỏ hàng trống
                         {% endif %}
                     </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'admin:index' %}">Admin</a>
-                </li>
-            </ul>
+                </div>
+            </div>
         </div>
-    </div>
-</nav>
+    </header>
 
-<style>
-.navbar-brand {
-    font-weight: bold;
-    font-size: 1.5rem;
-}
 
-.nav-link {
-    transition: color 0.3s ease;
-}
-
-.nav-link:hover {
-    color: #ffc107 !important;
-}
-
-.badge {
-    font-size: 0.7rem;
-    min-width: 18px;
-    height: 18px;
-    line-height: 18px;
-    text-align: center;
-}
-
-/* Hiệu ứng cho giỏ hàng */
-.nav-item:has([href*="cart"]) .nav-link {
-    background: linear-gradient(45deg, #28a745, #20c997);
-    border-radius: 20px;
-    padding: 8px 15px !important;
-    margin: 0 5px;
-    color: white !important;
-    transition: all 0.3s ease;
-}
-
-.nav-item:has([href*="cart"]) .nav-link:hover {
-    background: linear-gradient(45deg, #1e7e34, #17a2b8);
-    transform: translateY(-1px);
-    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-}
-</style> 

@@ -42,7 +42,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     
     # Local apps
-    'pages',      # Trang chủ và trang tĩnh
+    # 'pages',      # Trang chủ và trang tĩnh
     'books',      # Quản lý sách
     'cart',       # Giỏ hàng
     'orders',     # Đơn hàng
