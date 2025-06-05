@@ -4,7 +4,9 @@
 {% block content %}
 <link rel="stylesheet" href="../../../../static/css/book_list.css">
 <div class="container">
+
     <div class="">
+        {% include 'components/home_service.html' %}
         <!-- Form tìm kiếm -->
         <form method="get" class="search-form">
             {% if selected_category %}
@@ -32,8 +34,8 @@
                          
                             
                         </div>
-                        <div class="price-row">
-                            <span class="price">{{ book.price|floatformat:3 }}₫</span>
+                        <div class="price-row" style="margin-top: 8px;">
+                            <span class="price" style="font-size: 20px; font-weight: 700;">{{ book.price|floatformat:3 }}₫</span>
                         </div>
                         <div class="author">{{ book.author }}</div>
                         <div class="title">{{ book.title }}</div>
@@ -83,7 +85,7 @@
                 {% endif %}
             </div>
         {% endif %}
-
+        {% include 'components/reviews.html' %}
     </div>
 </div>
 {% endblock %}
