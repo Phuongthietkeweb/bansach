@@ -1,12 +1,13 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse
-from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib.auth.models import User
+from django.contrib.auth import logout
 from django.contrib import messages
 from django.db.models import Q
 from django.core.paginator import Paginator
 from .models import Book, Category
+from .forms import CustomUserCreationForm
 
 
 def book_list_view(request):
@@ -90,14 +91,20 @@ def book_detail_view(request, slug):
 
 def register_view(request):
     if request.method == 'POST':
-        form = UserCreationForm(request.POST)
+        form = CustomUserCreationForm(request.POST)
         if form.is_valid():
             form.save()
             messages.success(request, "Tạo tài khoản thành công!")
             return redirect('books:login')
     else:
-        form = UserCreationForm()
+        form = CustomUserCreationForm()
     return render(request, 'user/register.html', {'form': form})
+
+
+def logout_view(request):
+    """Custom logout view to show success page"""
+    logout(request)
+    return render(request, 'user/logout.html')
 
 
 @login_required

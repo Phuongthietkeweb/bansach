@@ -20,7 +20,7 @@
                    onclick="return confirm('Bạn có chắc chắn muốn xóa toàn bộ giỏ hàng?')">
                     🗑️ Xóa toàn bộ
                 </a>
-                <a href="#" class="btn-checkout">💳 Thanh toán</a>
+                <a href="{% url 'orders:checkout' %}" class="btn-checkout">💳 Thanh toán</a>
             </div>
         </div>
 
@@ -98,7 +98,7 @@
                 </div>
                 <div class="checkout-section">
                     <a href="{% url 'books:list' %}" class="btn-continue">📚 Tiếp tục mua sắm</a>
-                    <a href="#" class="btn-checkout-main">💳 Tiến hành thanh toán</a>
+                    <a href="{% url 'orders:checkout' %}" class="btn-checkout-main">💳 Tiến hành thanh toán</a>
                 </div>
             </div>
         </div>

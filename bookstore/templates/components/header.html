@@ -21,11 +21,22 @@
 
             <!-- Header Right Section -->
             <div class="header-right">
-                <!-- Heart/Wishlist Icon -->
-                <button class="icon-btn">
-                    <i class="far fa-heart"></i>
-                    <span class="badge">0</span>
-                </button>
+                <!-- User Authentication -->
+                <div class="user-auth">
+                    {% if user.is_authenticated %}
+                        <span class="user-greeting">Xin chào, <strong>{{ user.first_name|default:user.username }}!</strong></span>
+                        <a href="{% url 'books:logout' %}" class="auth-btn logout-btn">
+                            <i class="fas fa-sign-out-alt"></i> Đăng xuất
+                        </a>
+                    {% else %}
+                        <a href="{% url 'books:login' %}" class="auth-btn login-btn">
+                            <i class="fas fa-sign-in-alt"></i> Đăng nhập
+                        </a>
+                        <a href="{% url 'books:register' %}" class="auth-btn register-btn">
+                            <i class="fas fa-user-plus"></i> Đăng ký
+                        </a>
+                    {% endif %}
+                </div>
 
                 <!-- Shopping Cart Icon -->
                 <a href="{% url 'cart:detail' %}" class="icon-btn cart-link">
@@ -33,16 +44,6 @@
                     <span class="badge cart-count-badge">{{ cart_count|default:0 }}</span>
                 </a>
 
-                <!-- Cart Info -->
-                <div class="cart-info">
-                    <a href="{% url 'cart:detail' %}" class="cart-link-text">
-                        {% if cart_count > 0 %}
-                            {{ cart_count }} sản phẩm
-                        {% else %}
-                            Giỏ hàng trống
-                        {% endif %}
-                    </a>
-                </div>
             </div>
         </div>
     </header>

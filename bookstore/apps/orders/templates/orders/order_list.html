@@ -1,0 +1,258 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Lịch sử đơn hàng{% endblock %}
+
+{% block extra_css %}
+<style>
+    .orders-container {
+        max-width: 1000px;
+        margin: 0 auto;
+        padding: 20px;
+    }
+    
+    .orders-header {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 25px;
+        border-radius: 10px;
+        margin-bottom: 30px;
+        text-align: center;
+    }
+    
+    .order-card {
+        background: white;
+        border-radius: 10px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        margin-bottom: 20px;
+        overflow: hidden;
+        transition: transform 0.3s;
+    }
+    
+    .order-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+    }
+    
+    .order-card-header {
+        background: #f8f9fa;
+        padding: 20px;
+        border-bottom: 1px solid #e9ecef;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    
+    .order-info {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+    }
+    
+    .order-id {
+        font-weight: 600;
+        font-size: 18px;
+        color: #333;
+    }
+    
+    .order-date {
+        color: #666;
+        font-size: 14px;
+    }
+    
+    .order-status {
+        padding: 8px 16px;
+        border-radius: 20px;
+        font-size: 14px;
+        font-weight: 600;
+    }
+    
+    .status-pending { background: #fff3cd; color: #856404; }
+    .status-processing { background: #cce7ff; color: #0c5460; }
+    .status-shipped { background: #bde4ff; color: #055160; }
+    .status-delivered { background: #d1e7dd; color: #0a3622; }
+    .status-cancelled { background: #f8d7da; color: #721c24; }
+    
+    .order-card-body {
+        padding: 20px;
+    }
+    
+    .order-summary {
+        display: grid;
+        grid-template-columns: 1fr auto auto;
+        gap: 20px;
+        align-items: center;
+    }
+    
+    .order-items-preview {
+        color: #666;
+        font-size: 14px;
+    }
+    
+    .order-total {
+        font-weight: 600;
+        font-size: 18px;
+        color: #e74c3c;
+    }
+    
+    .order-actions {
+        display: flex;
+        gap: 10px;
+    }
+    
+    .btn {
+        padding: 8px 16px;
+        border-radius: 6px;
+        text-decoration: none;
+        font-size: 14px;
+        font-weight: 500;
+        transition: all 0.3s;
+        border: none;
+        cursor: pointer;
+    }
+    
+    .btn-primary {
+        background: #667eea;
+        color: white;
+    }
+    
+    .btn-secondary {
+        background: #6c757d;
+        color: white;
+    }
+    
+    .btn:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 3px 10px rgba(0,0,0,0.2);
+    }
+    
+    .empty-state {
+        text-align: center;
+        padding: 60px 20px;
+        background: white;
+        border-radius: 10px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    }
+    
+    .empty-icon {
+        font-size: 60px;
+        color: #ccc;
+        margin-bottom: 20px;
+    }
+    
+    .empty-title {
+        font-size: 24px;
+        color: #666;
+        margin-bottom: 10px;
+    }
+    
+    .empty-message {
+        color: #999;
+        margin-bottom: 30px;
+    }
+    
+    .shop-now-btn {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 15px 30px;
+        border-radius: 8px;
+        text-decoration: none;
+        font-weight: 600;
+        display: inline-block;
+        transition: transform 0.3s;
+    }
+    
+    .shop-now-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+    }
+    
+    @media (max-width: 768px) {
+        .orders-container {
+            padding: 15px;
+        }
+        
+        .order-card-header {
+            flex-direction: column;
+            gap: 15px;
+            align-items: flex-start;
+        }
+        
+        .order-summary {
+            grid-template-columns: 1fr;
+            gap: 15px;
+            text-align: center;
+        }
+        
+        .order-actions {
+            justify-content: center;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="orders-container">
+    <div class="orders-header">
+        <h1><i class="fas fa-history"></i> Lịch sử đơn hàng</h1>
+        <p>Theo dõi tình trạng và lịch sử các đơn hàng của bạn</p>
+    </div>
+    
+    {% if orders %}
+        {% for order in orders %}
+        <div class="order-card">
+            <div class="order-card-header">
+                <div class="order-info">
+                    <div>
+                        <div class="order-id">Đơn hàng #{{ order.id }}</div>
+                        <div class="order-date">{{ order.created_at|date:"d/m/Y H:i" }}</div>
+                    </div>
+                </div>
+                <div class="order-status status-{{ order.status }}">
+                    {{ order.get_status_display }}
+                </div>
+            </div>
+            
+            <div class="order-card-body">
+                <div class="order-summary">
+                    <div class="order-items-preview">
+                        {% with order.items.count as item_count %}
+                            {{ item_count }} sản phẩm
+                        {% endwith %}
+                        • {{ order.get_payment_method_display }}
+                    </div>
+                    
+                    <div class="order-total">
+                        {{ order.get_total_with_shipping|floatformat:0 }}₫
+                    </div>
+                    
+                    <div class="order-actions">
+                        <a href="{% url 'orders:detail' order.id %}" class="btn btn-primary">
+                            <i class="fas fa-eye"></i> Xem chi tiết
+                        </a>
+                        {% if order.status == 'pending' %}
+                        <button class="btn btn-secondary">
+                            <i class="fas fa-times"></i> Hủy
+                        </button>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    {% else %}
+        <div class="empty-state">
+            <div class="empty-icon">
+                <i class="fas fa-shopping-bag"></i>
+            </div>
+            <h2 class="empty-title">Chưa có đơn hàng nào</h2>
+            <p class="empty-message">
+                Bạn chưa có đơn hàng nào. Hãy khám phá và mua sắm những cuốn sách yêu thích!
+            </p>
+            <a href="{% url 'books:list' %}" class="shop-now-btn">
+                <i class="fas fa-shopping-cart"></i> Mua sắm ngay
+            </a>
+        </div>
+    {% endif %}
+</div>
+{% endblock %} 
