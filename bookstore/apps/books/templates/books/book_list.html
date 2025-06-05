@@ -33,7 +33,7 @@
                             
                         </div>
                         <div class="price-row">
-                            <span class="price">{{ book.price }}₫</span>
+                            <span class="price">{{ book.price|floatformat:3 }}₫</span>
                         </div>
                         <div class="author">{{ book.author }}</div>
                         <div class="title">{{ book.title }}</div>

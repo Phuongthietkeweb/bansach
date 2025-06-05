@@ -13,7 +13,7 @@
         <div class="cart-summary">
             <div class="cart-info">
                 <span class="cart-count">📦 Tổng cộng: {{ total_quantity }} sản phẩm</span>
-                <span class="cart-total">💰 Tổng tiền: <strong>{{ total_price|floatformat:0 }} VNĐ</strong></span>
+                <span class="cart-total">💰 Tổng tiền: <strong>{{ total_price|floatformat:3 }} VNĐ</strong></span>
             </div>
             <div class="cart-actions">
                 <a href="{% url 'cart:clear' %}" class="btn-clear" 
@@ -45,7 +45,7 @@
                         {% if item.book.category %}
                             <p class="item-category">🏷️ {{ item.book.category.name }}</p>
                         {% endif %}
-                        <p class="item-price">💰 {{ item.book.price|floatformat:0 }} VNĐ / cuốn</p>
+                        <p class="item-price">💰 {{ item.book.price|floatformat:3 }} VNĐ / cuốn</p>
                         <p class="item-stock">📦 Còn lại: {{ item.book.stock }} cuốn</p>
                     </div>
                     
@@ -70,7 +70,7 @@
                     
                     <div class="item-total">
                         <p class="total-label">Thành tiền:</p>
-                        <p class="total-amount">{{ item.item_total|floatformat:0 }} VNĐ</p>
+                        <p class="total-amount">{{ item.item_total|floatformat:3 }} VNĐ</p>
                     </div>
                     
                     <div class="item-actions">
@@ -93,7 +93,7 @@
                     </div>
                     <div class="total-row total-price-row">
                         <span>Tổng tiền:</span>
-                        <span class="final-total">{{ total_price|floatformat:0 }} VNĐ</span>
+                        <span class="final-total">{{ total_price|floatformat:3 }} VNĐ</span>
                     </div>
                 </div>
                 <div class="checkout-section">

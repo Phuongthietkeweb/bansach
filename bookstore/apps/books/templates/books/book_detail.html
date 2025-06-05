@@ -29,7 +29,7 @@
                 </p>
             {% endif %}
             
-            <p><strong>💰 Giá:</strong> <span class="price-highlight">{{ book.price }} VNĐ</span></p>
+            <p><strong>💰 Giá:</strong> <span class="price-highlight">{{ book.price|floatformat:3 }} VNĐ</span></p>
             
             <p><strong>📦 Tình trạng:</strong> 
                 {% if book.stock > 0 %}
@@ -95,7 +95,7 @@
                             <div class="related-book-info">
                                 <h4>{{ related_book.title }}</h4>
                                 <p class="related-book-author">{{ related_book.author }}</p>
-                                <p class="related-book-price">{{ related_book.price }} VNĐ</p>
+                                <p class="related-book-price">{{ related_book.price|floatformat:3 }} VNĐ</p>
                             </div>
                         </a>
                         <div class="related-book-actions">
