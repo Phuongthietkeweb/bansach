@@ -22,11 +22,14 @@ def cart_view(request):
     for book_id, quantity in cart.items():
         try:
             book = Book.objects.get(id=int(book_id))
-            item_total = book.price * quantity
+            # Sử dụng giá đã giảm thay vì giá gốc
+            discounted_price = book.get_discounted_price()
+            item_total = discounted_price * quantity
             cart_items.append({
                 'book': book,
                 'quantity': quantity,
-                'item_total': item_total
+                'item_total': item_total,
+                'discounted_price': discounted_price
             })
             total_price += item_total
             total_quantity += quantity

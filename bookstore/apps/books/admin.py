@@ -34,12 +34,12 @@ class CategoryAdmin(admin.ModelAdmin):
 
 @admin.register(Book)
 class BookAdmin(admin.ModelAdmin):
-    list_display = ('title', 'author', 'category', 'price', 'stock', 'slug', 'image_tag')
-    list_editable = ('price', 'stock', 'category')
+    list_display = ('title', 'author', 'category', 'price', 'discount', 'stock', 'slug', 'image_tag')
+    list_editable = ('price', 'discount', 'stock', 'category')
     list_filter = ('category', 'author', 'stock')
     search_fields = ('title', 'author', 'description')
     prepopulated_fields = {'slug': ('title',)}
-    readonly_fields = ('image_tag',) 
+    readonly_fields = ('image_tag', 'discounted_price_display') 
 
     fieldsets = (
         (None, {
@@ -49,7 +49,7 @@ class BookAdmin(admin.ModelAdmin):
             'fields': ('description', 'image', 'image_tag'),
         }),
         ('Thông tin bán hàng', {
-            'fields': ('price', 'stock'),
+            'fields': ('price', 'discount', 'discounted_price_display', 'stock'),
         }),
     )
 
@@ -59,5 +59,21 @@ class BookAdmin(admin.ModelAdmin):
         return "Không có ảnh"
     image_tag.short_description = 'Ảnh Sách'
     image_tag.allow_tags = True
+
+    def discounted_price_display(self, obj):
+        """Hiển thị giá sau khi giảm giá"""
+        try:
+            discounted_price = obj.get_discounted_price()
+            if obj.discount > 0:
+                return format_html(
+                    '<span style="color: red; font-weight: bold;">{} VNĐ</span> '
+                    '<small style="color: gray;">(Giảm {}%)</small>',
+                    int(discounted_price), obj.discount
+                )
+            return format_html('{} VNĐ', int(discounted_price))
+        except Exception:
+            return "Lỗi tính giá"
+    discounted_price_display.short_description = 'Giá Sau Giảm'
+    discounted_price_display.admin_order_field = 'price'
 
 

@@ -401,7 +401,12 @@
                     <div class="item-info">
                         <div class="item-title">{{ item.book.title }}</div>
                         <div class="item-price">
-                            {{ item.book.price|floatformat:3 }}₫
+                            {% if item.book.discount > 0 %}
+                                {{ item.discounted_price|floatformat:0 }}₫
+                                <span style="text-decoration: line-through; color: #999; font-size: 0.9em;">({{ item.book.price|floatformat:0 }}₫)</span>
+                            {% else %}
+                                {{ item.book.price|floatformat:0 }}₫
+                            {% endif %}
                             <span class="item-quantity">x{{ item.quantity }}</span>
                         </div>
                     </div>
@@ -412,7 +417,7 @@
             <div class="summary-calculations">
                 <div class="summary-row">
                     <span>Tạm tính ({{ total_quantity }} sản phẩm):</span>
-                    <span>{{ total_price|floatformat:3 }}₫</span>
+                    <span>{{ total_price|floatformat:0 }}₫</span>
                 </div>
                 
                 <div class="summary-row">
@@ -420,13 +425,13 @@
                     {% if shipping_fee == 0 %}
                         <span class="free-shipping">Miễn phí</span>
                     {% else %}
-                        <span>{{ shipping_fee|floatformat:3 }}₫</span>
+                        <span>{{ shipping_fee|floatformat:0 }}₫</span>
                     {% endif %}
                 </div>
                 
                 <div class="summary-row total">
                     <span>Tổng cộng:</span>
-                    <span>{{ final_total|floatformat:3 }}₫</span>
+                    <span>{{ final_total|floatformat:0 }}₫</span>
                 </div>
             </div>
             

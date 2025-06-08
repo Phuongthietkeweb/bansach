@@ -431,13 +431,13 @@
                 <div class="item-title">{{ item.book.title }}</div>
                 <div class="item-author">Tác giả: {{ item.book.author }}</div>
                 <div class="item-price-info">
-                    <div class="item-price">{{ item.price|floatformat:3 }}₫ / cuốn</div>
+                    <div class="item-price">{{ item.price|floatformat:0 }}₫ / cuốn</div>
                     <div class="item-quantity">Số lượng: {{ item.quantity }}</div>
                 </div>
             </div>
             
             <div class="item-total">
-                <div class="item-total-price">{{ item.get_total_price|floatformat:3 }}₫</div>
+                <div class="item-total-price">{{ item.get_total_price|floatformat:0 }}₫</div>
             </div>
         </div>
         {% endfor %}
@@ -449,7 +449,7 @@
         
         <div class="summary-row">
             <span>Tạm tính:</span>
-            <span>{{ order.total_amount|floatformat:3 }}₫</span>
+            <span>{{ order.total_amount|floatformat:0 }}₫</span>
         </div>
         
         <div class="summary-row">
@@ -457,7 +457,7 @@
             {% if order.shipping_fee == 0 %}
                 <span style="color: #27ae60;">Miễn phí</span>
             {% else %}
-                <span>{{ order.shipping_fee|floatformat:3 }}₫</span>
+                <span>{{ order.shipping_fee|floatformat:0 }}₫</span>
             {% endif %}
         </div>
         
@@ -468,7 +468,7 @@
         
         <div class="summary-row total">
             <span>Tổng cộng:</span>
-            <span>{{ order.get_total_with_shipping|floatformat:3 }}₫</span>
+            <span>{{ order.get_total_with_shipping|floatformat:0 }}₫</span>
         </div>
         
         {% if order.notes %}

@@ -38,7 +38,15 @@
                             
                         </div>
                         <div class="price-row" style="margin-top: 8px;">
-                            <span class="price" style="font-size: 20px; font-weight: 700;">{{ book.price|floatformat:3 }}₫</span>
+                            {% if book.discount > 0 %}
+                                <span class="price" style="font-size: 20px; font-weight: 700; color: #e74c3c;">{{ book.get_discounted_price|floatformat:0 }}₫</span>
+                                <div style="margin-top: 4px;">
+                                    <span class="original-price" style="font-size: 14px; text-decoration: line-through; color: #999;">{{ book.price|floatformat:0 }}₫</span>
+                                    <span class="discount-badge" style="background: #e74c3c; color: white; padding: 2px 6px; border-radius: 3px; font-size: 12px; margin-left: 5px;">-{{ book.discount }}%</span>
+                                </div>
+                            {% else %}
+                                <span class="price" style="font-size: 20px; font-weight: 700;">{{ book.price|floatformat:0 }}₫</span>
+                            {% endif %}
                         </div>
                         <div class="author">{{ book.author }}</div>
                         <div class="title">{{ book.title }}</div>

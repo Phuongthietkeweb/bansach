@@ -52,11 +52,14 @@ def checkout_view(request):
                 messages.error(request, f'Sách "{book.title}" chỉ còn {book.stock} cuốn trong kho!')
                 return redirect('cart:detail')
             
-            item_total = book.price * quantity
+            # Sử dụng giá đã giảm thay vì giá gốc
+            discounted_price = book.get_discounted_price()
+            item_total = discounted_price * quantity
             cart_items.append({
                 'book': book,
                 'quantity': quantity,
-                'item_total': item_total
+                'item_total': item_total,
+                'discounted_price': discounted_price
             })
             total_price += item_total
             total_quantity += quantity
@@ -87,7 +90,7 @@ def checkout_view(request):
                             order=order,
                             book=item['book'],
                             quantity=item['quantity'],
-                            price=item['book'].price
+                            price=item['discounted_price']
                         )
                         # Giảm tồn kho
                         item['book'].stock -= item['quantity']

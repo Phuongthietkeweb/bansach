@@ -194,6 +194,23 @@
     font-weight: bold;
 }
 
+.book-info .original-price {
+    text-decoration: line-through;
+    color: #999;
+    font-size: 16px;
+    margin-left: 10px;
+}
+
+.book-info .discount-badge {
+    background: #e74c3c;
+    color: white;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 14px;
+    margin-left: 10px;
+    font-weight: bold;
+}
+
 .category-link {
     color: #007bff;
     text-decoration: none;
@@ -480,4 +497,47 @@
     background: #f3f4f6;
     color: #9ca3af;
     cursor: not-allowed;
+}
+
+/* Styles cho giá discount */
+.original-price {
+    text-decoration: line-through;
+    color: #999;
+    font-size: 0.9em;
+    margin-left: 10px;
+}
+
+.discount-badge {
+    background: #e74c3c;
+    color: white;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 0.8em;
+    margin-left: 8px;
+    font-weight: bold;
+}
+
+.discounted-price {
+    color: #e74c3c;
+    font-weight: bold;
+}
+
+/* Cải thiện responsive cho giá */
+@media (max-width: 480px) {
+    .price-row {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    
+    .original-price {
+        margin-left: 0;
+        margin-top: 4px;
+    }
+    
+    .discount-badge {
+        margin-left: 0;
+        margin-top: 4px;
+        align-self: flex-start;
+    }
 }
