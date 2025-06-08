@@ -11,33 +11,22 @@ class Order(models.Model):
         ('delivered', 'Đã nhận hàng'),
         ('cancelled', 'Đã hủy'),
     ]
-    
     PAYMENT_CHOICES = [
         ('cod', 'Thanh toán khi nhận hàng'),
     ]
-    
-    # Thông tin khách hàng
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True, verbose_name="Khách hàng")
     full_name = models.CharField(max_length=100, verbose_name="Họ và tên")
     email = models.EmailField(verbose_name="Email")
     phone = models.CharField(max_length=20, verbose_name="Số điện thoại")
-    
-    # Địa chỉ giao hàng
     address = models.TextField(verbose_name="Địa chỉ")
     city = models.CharField(max_length=100, verbose_name="Tỉnh/Thành phố")
     district = models.CharField(max_length=100, verbose_name="Quận/Huyện")
     ward = models.CharField(max_length=100, verbose_name="Phường/Xã")
-    
-    # Thông tin đơn hàng
     total_amount = models.DecimalField(max_digits=10, decimal_places=3, verbose_name="Tổng tiền")
     shipping_fee = models.DecimalField(max_digits=10, decimal_places=3, default=0, verbose_name="Phí vận chuyển")
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='pending', verbose_name="Trạng thái")
     payment_method = models.CharField(max_length=20, choices=PAYMENT_CHOICES, default='cod', verbose_name="Phương thức thanh toán")
-    
-    # Ghi chú
     notes = models.TextField(blank=True, null=True, verbose_name="Ghi chú")
-    
-    # Thời gian
     created_at = models.DateTimeField(auto_now_add=True, verbose_name="Ngày tạo")
     updated_at = models.DateTimeField(auto_now=True, verbose_name="Ngày cập nhật")
     

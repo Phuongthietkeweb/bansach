@@ -6,7 +6,7 @@
 <div class="container">
 
     <div class="">
-        {% include 'components/home_service.html' %}
+       
         <!-- Form tìm kiếm -->
         <form method="get" class="search-form">
             {% if selected_category %}
@@ -16,20 +16,23 @@
                 <input type="text" name="q" placeholder="Tìm kiếm theo tên sách" value="{{ request.GET.q }}" class="search-input">
                 <input type="number" name="min_price" placeholder="Giá tối thiểu" value="{{ request.GET.min_price }}" class="price-input">
                 <input type="number" name="max_price" placeholder="Giá tối đa" value="{{ request.GET.max_price }}" class="price-input">
-                <button type="submit" class="search-btn">🔍 Tìm kiếm</button>
+                <button type="submit" class="search-btn">Tìm kiếm</button>
             </div>
         </form>
         <!-- Danh sách sách -->
         {% if page_obj %}
+        <div style="display: flex; gap: 20px;">
+            {% include 'components/categories.html' %}
             <div class="book-grid">
+
                 {% for book in page_obj %}
                 <div class="book-item">
                     <a href="{% url 'books:detail' slug=book.slug %}" class="book-link">
                         <div class="image-wrapper">
                             {% if book.image %}
-                                <img src="{{ book.image.url }}" alt="{{ book.title }}" class="book-image" width="240" height="320" />
+                                <img src="{{ book.image.url }}" alt="{{ book.title }}" class="book-image" width="240" height="250" />
                             {% else %}
-                                <img src="{% static 'books/placeholder.png' %}" alt="No Image" class="book-image" width="240" height="320" />
+                                <img src="{% static 'books/placeholder.png' %}" alt="No Image" class="book-image" width="240" height="250" />
                             {% endif %}
                          
                             
@@ -74,6 +77,7 @@
                 </div>
                 {% endfor %}
             </div>
+        </div>
         {% else %}
             <div class="no-books">
                 <h3>📭 Không tìm thấy sách nào</h3>
@@ -86,6 +90,7 @@
             </div>
         {% endif %}
         {% include 'components/reviews.html' %}
+        {% include 'components/home_service.html' %}
     </div>
 </div>
 {% endblock %}

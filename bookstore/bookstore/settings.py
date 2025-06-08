@@ -46,7 +46,6 @@ INSTALLED_APPS = [
     'books',      # Quản lý sách
     'cart',       # Giỏ hàng
     'orders',     # Đơn hàng
-    'accounts',   # Quản lí user
 ]
 
 MIDDLEWARE = [

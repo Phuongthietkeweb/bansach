@@ -8,7 +8,9 @@
 body {
     font-family: 'Arial', sans-serif;
 }
-
+ul li a {
+    text-decoration: none;
+}
 .header {
     background: white;
     box-shadow: 0 2px 10px rgba(0,0,0,0.1);

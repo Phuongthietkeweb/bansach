@@ -11,7 +11,9 @@ body {
     align-items: flex-start;
     min-height: 100vh;
 }
-
+ul li a {
+    text-decoration: none;
+}
 .container {
     background-color: #ffffff;
     border-radius: 10px;
@@ -286,7 +288,7 @@ h1 {
 .book-image {
     flex-shrink: 0;
     text-align: center;
-    width: 350px;
+    width: 250px;
 }
 
 .book-image img {

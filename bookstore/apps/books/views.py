@@ -111,22 +111,3 @@ def logout_view(request):
 def profile_view(request):
     return render(request, 'user/profile.html')
 
-
-@user_passes_test(lambda u: u.is_staff)
-def user_list(request):
-    query = request.GET.get('q')
-    if query:
-        users = User.objects.filter(
-            Q(username__icontains=query) | Q(email__icontains=query)
-        )
-    else:
-        users = User.objects.all()
-    return render(request, 'user/user_list.html', {'users': users})
-
-
-@user_passes_test(lambda u: u.is_staff)
-def delete_user(request, user_id):
-    user = get_object_or_404(User, id=user_id)
-    if request.user != user:
-        user.delete()
-    return redirect('books:user_list')
