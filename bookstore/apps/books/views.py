@@ -4,10 +4,13 @@ from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib.auth.models import User
 from django.contrib.auth import logout
 from django.contrib import messages
-from django.db.models import Q
+from django.db.models import Q, Sum, Count
 from django.core.paginator import Paginator
 from .models import Book, Category
 from .forms import CustomUserCreationForm
+from orders.models import Order, OrderItem
+from datetime import datetime, timedelta
+from django.utils import timezone
 
 
 def book_list_view(request):
@@ -110,4 +113,90 @@ def logout_view(request):
 @login_required
 def profile_view(request):
     return render(request, 'user/profile.html')
+
+
+def is_admin(user):
+    """Check if user is admin"""
+    return user.is_authenticated and user.is_staff
+
+@user_passes_test(is_admin)
+def admin_dashboard_view(request):
+    """Trang dashboard admin với thống kê"""
+    
+    # Thống kê cơ bản
+    total_books = Book.objects.count()
+    total_orders = Order.objects.count()
+    total_users = User.objects.count()
+    
+    # Thống kê sách
+    books_in_stock = Book.objects.filter(stock__gt=0).count()
+    books_out_of_stock = Book.objects.filter(stock=0).count()
+    
+    # Thống kê đơn hàng theo trạng thái
+    orders_pending = Order.objects.filter(status='pending').count()
+    orders_processing = Order.objects.filter(status='processing').count()
+    orders_shipped = Order.objects.filter(status='shipped').count()
+    orders_delivered = Order.objects.filter(status='delivered').count()
+    orders_cancelled = Order.objects.filter(status='cancelled').count()
+    
+    # Thống kê doanh thu
+    total_revenue = Order.objects.filter(
+        status__in=['delivered', 'shipped']
+    ).aggregate(
+        total=Sum('total_amount')
+    )['total'] or 0
+    
+    # Thống kê trong 30 ngày qua
+    thirty_days_ago = timezone.now() - timedelta(days=30)
+    recent_orders = Order.objects.filter(created_at__gte=thirty_days_ago).count()
+    recent_revenue = Order.objects.filter(
+        created_at__gte=thirty_days_ago,
+        status__in=['delivered', 'shipped']
+    ).aggregate(
+        total=Sum('total_amount')
+    )['total'] or 0
+    
+    # Top 5 sách bán chạy
+    top_books = OrderItem.objects.values('book__title', 'book__author').annotate(
+        total_sold=Sum('quantity')
+    ).order_by('-total_sold')[:5]
+    
+    # Đơn hàng gần đây (5 đơn mới nhất)
+    recent_orders_list = Order.objects.select_related('user').order_by('-created_at')[:5]
+    
+    # Thống kê theo danh mục
+    categories_stats = Category.objects.annotate(
+        book_count=Count('book'),
+        sold_count=Sum('book__orderitem__quantity')
+    ).order_by('-book_count')[:5]
+    
+    context = {
+        # Thống kê tổng quan
+        'total_books': total_books,
+        'total_orders': total_orders,
+        'total_users': total_users,
+        'total_revenue': total_revenue,
+        
+        # Thống kê sách
+        'books_in_stock': books_in_stock,
+        'books_out_of_stock': books_out_of_stock,
+        
+        # Thống kê đơn hàng
+        'orders_pending': orders_pending,
+        'orders_processing': orders_processing,
+        'orders_shipped': orders_shipped,
+        'orders_delivered': orders_delivered,
+        'orders_cancelled': orders_cancelled,
+        
+        # Thống kê 30 ngày
+        'recent_orders': recent_orders,
+        'recent_revenue': recent_revenue,
+        
+        # Chi tiết
+        'top_books': top_books,
+        'recent_orders_list': recent_orders_list,
+        'categories_stats': categories_stats,
+    }
+    
+    return render(request, 'admin/dashboard.html', context)
 

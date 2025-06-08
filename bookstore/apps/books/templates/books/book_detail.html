@@ -156,34 +156,41 @@
             </div>
         {% endif %}
         <div class="book-info">
-            <h2>{{ book.title }}</h2>
-            <p><strong>✍️ Tác giả:</strong> {{ book.author }}</p>
+            <div class="">
+                <h2>{{ book.title }}</h2>
+                <p><strong>✍️ Tác giả:</strong> {{ book.author }}</p>
+            </div>
+            <div class="">
+                {% if book.category %}
+                    <p><strong>🏷️ Thể loại:</strong> 
+                        <a href="{% url 'books:list' %}?category={{ book.category.slug }}" class="category-link">
+                            {{ book.category.name }}
+                        </a>
+                    </p>
+                {% endif %}
+            </div>
             
-            {% if book.category %}
-                <p><strong>🏷️ Thể loại:</strong> 
-                    <a href="{% url 'books:list' %}?category={{ book.category.slug }}" class="category-link">
-                        {{ book.category.name }}
-                    </a>
+            <div class="">
+                <p><strong>💰 Giá:</strong> 
+                    {% if book.discount > 0 %}
+                        <span class="price-highlight">{{ book.get_discounted_price|floatformat:0 }} VNĐ</span>
+                        <span style="font-size: 14px; text-decoration: line-through; color: #999;" class="original-price">{{ book.price|floatformat:0 }} VNĐ</span>
+                        <span style="background: #e74c3c; color: white; padding: 2px 6px; border-radius: 3px; font-size: 12px; margin-left: 5px;" class="discount-badge">-{{ book.discount }}%</span>
+                    {% else %}
+                        <span class="price-highlight">{{ book.price|floatformat:0 }} VNĐ</span>
+                    {% endif %}
                 </p>
-            {% endif %}
+            </div>
             
-            <p><strong>💰 Giá:</strong> 
-                {% if book.discount > 0 %}
-                    <span class="price-highlight">{{ book.get_discounted_price|floatformat:0 }} VNĐ</span>
-                    <span style="font-size: 14px; text-decoration: line-through; color: #999;" class="original-price">{{ book.price|floatformat:0 }} VNĐ</span>
-                    <span style="background: #e74c3c; color: white; padding: 2px 6px; border-radius: 3px; font-size: 12px; margin-left: 5px;" class="discount-badge">-{{ book.discount }}%</span>
-                {% else %}
-                    <span class="price-highlight">{{ book.price|floatformat:0 }} VNĐ</span>
-                {% endif %}
-            </p>
-            
-            <p><strong>📦 Tình trạng:</strong> 
-                {% if book.stock > 0 %}
-                    <span class="stock-status in-stock">✅ Còn hàng ({{ book.stock }} cuốn)</span>
-                {% else %}
-                    <span class="stock-status out-of-stock">❌ Hết hàng</span>
-                {% endif %}
-            </p>
+            <div class="">
+                <p><strong>📦 Tình trạng:</strong> 
+                    {% if book.stock > 0 %}
+                        <span class="stock-status in-stock">✅ Còn hàng ({{ book.stock }} cuốn)</span>
+                    {% else %}
+                        <span class="stock-status out-of-stock">❌ Hết hàng</span>
+                    {% endif %}
+                </p>
+            </div>
             
             <!-- Form thêm vào giỏ hàng -->
             <div class="add-to-cart-section">

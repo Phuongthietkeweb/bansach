@@ -12,6 +12,8 @@ urlpatterns = [
     path('logout/', views.logout_view, name='logout'),
     path('profile/', views.profile_view, name='profile'),
 
+    # Admin dashboard
+    path('admin-dashboard/', views.admin_dashboard_view, name='admin_dashboard'),
 
     path('', views.book_list_view, name='list'),              # /books/ - Danh sách sách
     path('<slug:slug>/', views.book_detail_view, name='detail'), # /books/ten-sach/ - Chi tiết sách

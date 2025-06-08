@@ -182,10 +182,14 @@
     box-shadow: 0 4px 8px rgba(0,0,0,0.1);
 }
 
-.book-info h2 {
+.book-info  div h2 {
     color: #333;
     margin-bottom: 20px;
     font-size: 24px;
+}
+
+.book-info div {
+    padding: 10px;
 }
 
 .price-highlight {
